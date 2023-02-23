@@ -11,10 +11,10 @@ namespace {
     SkeletonPass() : FunctionPass(ID) {}
 
     virtual bool runOnFunction(Function &F) {
-      errs() << "I saw a function called " << F.getName() << " " << F.arg_size() << "!\n";
+      errs() << "I saw a function called '" << F.getName() << "', arg_size: " << F.arg_size() << "\n";
       LLVMContext& C = F.getContext();
       for (auto& B : F) {
-        errs() << "I saw a block called " << B.getName() << "!\n";
+        errs() << "I saw a block called " << B.getName() << "\n";
         for (auto& I : B) {
           errs() << I << "\n";
         }

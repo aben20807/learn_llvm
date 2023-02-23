@@ -15,12 +15,12 @@ $ clang -flegacy-pass-manager -Xclang -load -Xclang llvm-pass-skeleton/build/ske
 <summary>Output</summary>
 
 ```
-I saw a function called foo 0!
-I saw a block called !
+I saw a function called 'foo', arg_size: 0
+I saw a block called 
   %1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i64 0, i64 0))
   ret void
-I saw a function called bar 2!
-I saw a block called !
+I saw a function called 'bar', arg_size: 2
+I saw a block called 
   %3 = alloca i32, align 4
   %4 = alloca i32, align 4
   store i32 %0, i32* %3, align 4
@@ -31,15 +31,15 @@ I saw a block called !
   %8 = load i32, i32* %4, align 4
   %9 = add nsw i32 %7, %8
   ret i32 %9
-I saw a function called baz 1!
-I saw a block called !
+I saw a function called 'baz', arg_size: 1
+I saw a block called 
   %2 = alloca float, align 4
   store float %0, float* %2, align 4
   %3 = load float, float* %2, align 4
   %4 = fptosi float %3 to i32
   ret i32 %4
-I saw a function called main 2!
-I saw a block called !
+I saw a function called 'main', arg_size: 2
+I saw a block called 
   %3 = alloca i32, align 4
   %4 = alloca i32, align 4
   %5 = alloca i8**, align 8
