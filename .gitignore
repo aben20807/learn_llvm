@@ -1,4 +1,7 @@
 *.out
 *.txt
+*.ll
+*.bc
 .cache/
 tmp/
+build/

@@ -1,5 +1,13 @@
 # Learn LLVM
 
+## Develop
+
+Generate `compile_commands.json` for IDE
+
+```bash
+$ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
+```
+
 ## Legacy pass manager
 
 ```bash
@@ -8,7 +16,7 @@ $ mkdir build && cd build
 $ cmake -G Ninja ..
 $ ninja
 $ cd ../..
-$ clang -flegacy-pass-manager -Xclang -load -Xclang llvm-pass-skeleton/build/skeleton/libSkeletonPass.* something.c
+$ clang -flegacy-pass-manager -Xclang -load -Xclang llvm-pass-skeleton/build/skeleton/libSkeletonPass.so something.c
 ```
 
 <details>
@@ -61,3 +69,29 @@ I saw a block called
 ```
 
 </details>
+
+## Inject printf
+
+```bash
+$ cd llvm-pass-inject
+$ mkdir build && cd build
+$ cmake -G Ninja ..
+$ ninja
+$ cd ../..
+$ clang -flegacy-pass-manager -Xclang -load -Xclang llvm-pass-inject/build/inject/libInjectPass.so something.c
+
+$ ./a.out 
+call foo
+call printf
+foo
+call bar
+call printf
+20
+call baz
+call printf
+3
+```
+
+## References
+
++ [CMU Lecture 3 More on the LLVM Compiler](https://www.cs.cmu.edu/afs/cs/academic/class/15745-s16/www/lectures/L3-LLVM2.pdf)
