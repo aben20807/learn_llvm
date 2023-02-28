@@ -4,7 +4,7 @@ A completely useless LLVM pass.
 
 Build:
 
-    $ cd llvm-pass-skeleton
+    $ cd llvm-pass-inject
     $ mkdir build
     $ cd build
     $ cmake ..
@@ -13,4 +13,4 @@ Build:
 
 Run:
 
-    $ clang -Xclang -load -Xclang build/skeleton/libSkeletonPass.* something.c
+    $ clang -Xclang -load -Xclang build/inject/libInjectPass.so something.c
