@@ -9,27 +9,59 @@ $ cd llvm-pass-inject
 $ mkdir build && cd build
 $ cmake -G Ninja ..
 $ ninja
-$ cd ../..
 ```
 
 ## Run
 
 ```bash
-$ clang -flegacy-pass-manager -Xclang -load -Xclang llvm-pass-inject/build/inject/libInjectPass.so something.c
+$ clang -flegacy-pass-manager -Xclang -load -Xclang inject/libInjectPass.so ../../something.c
 ```
 
 ## Output
 
 ```bash
 $ ./a.out 
-call foo
-call printf
+inject printf for call 'foo'
+inject printf for call 'printf'
 foo
-call bar
-call printf
-20
-call baz
-call printf
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'foo'
+inject printf for call 'printf'
+foo
+inject printf for call 'bar'
+inject printf for call 'printf'
+10
+inject printf for call 'baz'
+inject printf for call 'printf'
 3
 ```
 

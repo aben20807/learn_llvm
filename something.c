@@ -5,7 +5,10 @@ void foo() {
 }
 
 int bar(int a, int b) {
-    return a * b + b;
+    if (a > b) {
+        return a * b + b;
+    }
+    return a * b - b;
 }
 
 int baz(float x) {
@@ -14,6 +17,10 @@ int baz(float x) {
 
 int main(int argc, char *argv[]) {
 
+    for (int i = 0; i < 10; ++i) {
+        foo();
+    }
+    foo();
     foo();
     int abb = bar(3, 5);
     printf("%d\n", abb);

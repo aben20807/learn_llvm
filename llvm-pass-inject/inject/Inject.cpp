@@ -35,10 +35,10 @@ struct InjectPass : public FunctionPass {
            ++BI) {
 
         if (isa<CallInst>(&(*BI))) {
-          auto n = (*BI).getNumOperands();
-          for (int i = 0; i < n; ++i) {
-            errs() << i << (*BI).getOperand(i)->getName() << "\n";
-          }
+          // auto n = (*BI).getNumOperands();
+          // for (int i = 0; i < n; ++i) {
+          //   errs() << i << (*BI).getOperand(i)->getName() << "\n";
+          // }
           // Declare C standard library printf
           Type *intType = Type::getInt32Ty(context);
           std::vector<Type *> printfArgsTypes({Type::getInt8PtrTy(context)});
@@ -51,9 +51,9 @@ struct InjectPass : public FunctionPass {
           // get the called function name
           // Ref: https://stackoverflow.com/a/11687221
           std::string s =
-              std::string("call ") +
+              std::string("inject printf for call '") +
               std::string(cast<CallInst>(*BI).getCalledFunction()->getName()) +
-              std::string("\n");
+              std::string("'\n");
           Value *str = builder.CreateGlobalStringPtr(s, "str", 0, M);
           std::vector<Value *> argsV({str});
 
