@@ -1,16 +1,35 @@
-# llvm-pass-skeleton
+# llvm-pass-inject
 
-A completely useless LLVM pass.
+Inject printf function to the call instrument
 
-Build:
+## Build
 
-    $ cd llvm-pass-inject
-    $ mkdir build
-    $ cd build
-    $ cmake ..
-    $ make
-    $ cd ..
+```bash
+$ cd llvm-pass-inject
+$ mkdir build && cd build
+$ cmake -G Ninja ..
+$ ninja
+$ cd ../..
+```
 
-Run:
+## Run
 
-    $ clang -Xclang -load -Xclang build/inject/libInjectPass.so something.c
+```bash
+$ clang -flegacy-pass-manager -Xclang -load -Xclang llvm-pass-inject/build/inject/libInjectPass.so something.c
+```
+
+## Output
+
+```bash
+$ ./a.out 
+call foo
+call printf
+foo
+call bar
+call printf
+20
+call baz
+call printf
+3
+```
+
