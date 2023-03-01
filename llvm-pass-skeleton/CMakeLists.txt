@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
+project(llvm-pass-skeleton)
 
 find_package(LLVM REQUIRED CONFIG)
 add_definitions(${LLVM_DEFINITIONS})
