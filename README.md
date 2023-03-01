@@ -8,11 +8,11 @@ Generate `compile_commands.json` for IDE
 $ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
 ```
 
-## llvm-pass-skeleton
+## Examples
 
-## llvm-pass-inject
-
-## llvm-pass-pgo
++ llvm-pass-skeleton
++ llvm-pass-inject
++ llvm-pass-pgo
 
 ## References
 
