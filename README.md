@@ -10,9 +10,9 @@ $ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
 
 ## Examples
 
-+ llvm-pass-skeleton
-+ llvm-pass-inject
-+ llvm-pass-pgo
++ [llvm-pass-skeleton](llvm-pass-skeleton/)
++ [llvm-pass-inject](llvm-pass-inject/)
++ [llvm-pass-pgo](llvm-pass-pgo/)
 
 ## References
 

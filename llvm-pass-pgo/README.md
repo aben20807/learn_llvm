@@ -1,4 +1,4 @@
-# llvm-pass-skeleton
+# llvm-pass-pgo
 
 A completely useless LLVM pass.
 
