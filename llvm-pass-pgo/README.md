@@ -1,6 +1,6 @@
 # llvm-pass-pgo
 
-A completely useless LLVM pass.
+PGO flow to get counter during first run
 
 ## Build
 
