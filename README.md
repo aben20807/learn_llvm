@@ -13,6 +13,7 @@ $ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
 + [llvm-pass-skeleton](llvm-pass-skeleton/)
 + [llvm-pass-inject](llvm-pass-inject/)
 + [llvm-pass-pgo](llvm-pass-pgo/)
++ [llvm-pass-debug](llvm-pass-debug/)
 
 ## References
 

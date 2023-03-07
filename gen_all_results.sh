@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 dirlist=$(find $1 -mindepth 1 -maxdepth 1 -type d)
 root=$(pwd)
 for dir in $dirlist
