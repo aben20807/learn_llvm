@@ -1,6 +1,6 @@
 # llvm-pass-skeleton
 
-A completely useless LLVM pass for legacy pass manager.
+A completely useless LLVM pass for the legacy pass manager.
 
 ## build and run
 
@@ -19,7 +19,7 @@ $ clang -flegacy-pass-manager -Xclang -load -Xclang skeleton/libSkeletonPass.so 
 
 ## Output
 
-```
+```{out1.res}
 I saw a function called 'foo', arg_size: 0
 I saw a block called 
   %1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i64 0, i64 0))
@@ -69,34 +69,45 @@ I saw a block called
   %6 = alloca i32, align 4
   %7 = alloca i32, align 4
   %8 = alloca i32, align 4
+  %9 = alloca i32, align 4
+  %10 = alloca float, align 4
+  %11 = alloca i32, align 4
   store i32 0, i32* %3, align 4
   store i32 %0, i32* %4, align 4
   store i8** %1, i8*** %5, align 8
   store i32 0, i32* %6, align 4
-  br label %9
+  br label %12
 I saw a block called 
-  %10 = load i32, i32* %6, align 4
-  %11 = icmp slt i32 %10, 10
-  br i1 %11, label %12, label %16
-I saw a block called 
-  call void @foo()
-  br label %13
-I saw a block called 
-  %14 = load i32, i32* %6, align 4
-  %15 = add nsw i32 %14, 1
-  store i32 %15, i32* %6, align 4
-  br label %9, !llvm.loop !2
+  %13 = load i32, i32* %6, align 4
+  %14 = icmp slt i32 %13, 10
+  br i1 %14, label %15, label %19
 I saw a block called 
   call void @foo()
+  br label %16
+I saw a block called 
+  %17 = load i32, i32* %6, align 4
+  %18 = add nsw i32 %17, 1
+  store i32 %18, i32* %6, align 4
+  br label %12, !llvm.loop !2
+I saw a block called 
   call void @foo()
-  %17 = call i32 @bar(i32 3, i32 5)
-  store i32 %17, i32* %7, align 4
-  %18 = load i32, i32* %7, align 4
-  %19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i64 0, i64 0), i32 %18)
-  %20 = call i32 @baz(float 0x40091EB860000000)
-  store i32 %20, i32* %8, align 4
+  call void @foo()
+  store i32 3, i32* %7, align 4
+  store i32 5, i32* %8, align 4
+  %20 = load i32, i32* %7, align 4
   %21 = load i32, i32* %8, align 4
-  %22 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i64 0, i64 0), i32 %21)
+  %22 = call i32 @bar(i32 %20, i32 %21)
+  store i32 %22, i32* %9, align 4
+  %23 = load i32, i32* %9, align 4
+  %24 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i64 0, i64 0), i32 %23)
+  store float 0x40091EB860000000, float* %10, align 4
+  %25 = load float, float* %10, align 4
+  %26 = call i32 @baz(float %25)
+  store i32 %26, i32* %11, align 4
+  %27 = load float, float* %10, align 4
+  %28 = fpext float %27 to double
+  %29 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.3, i64 0, i64 0), double %28)
+  %30 = load i32, i32* %11, align 4
+  %31 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i64 0, i64 0), i32 %30)
   ret i32 0
 ```
-

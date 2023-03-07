@@ -1,14 +1,14 @@
+#include "llvm/Analysis/AliasAnalysis.h"
+#include "llvm/Analysis/BlockFrequencyInfo.h"
+#include "llvm/Analysis/BranchProbabilityInfo.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/DebugInfoMetadata.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/Pass.h"
+#include "llvm/Passes/PassBuilder.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
-#include "llvm/Analysis/AliasAnalysis.h"
-#include "llvm/Passes/PassBuilder.h"
-#include "llvm/Analysis/BranchProbabilityInfo.h"
-#include "llvm/Analysis/BlockFrequencyInfo.h"
 
 using namespace llvm;
 
@@ -27,16 +27,19 @@ struct PGOPass : public FunctionPass {
       errs() << "ProfileCount: " << EntryCountVal << "\n";
     }
 
-    // Ref: https://opensource.apple.com/source/clang/clang-703.0.29/src/lib/Transforms/Vectorize/LoopVectorize.cpp.auto.html
-    BlockFrequencyInfo* BFI = &getAnalysis<BlockFrequencyInfoWrapperPass>().getBFI();
-    // Ref: https://github.com/microsoft/llvm-1/blob/d91b01bb7602ac9a89e3e352a5e464eeefb3ed08/unittests/Analysis/BlockFrequencyInfoTest.cpp#L79
+    // Ref:
+    // https://opensource.apple.com/source/clang/clang-703.0.29/src/lib/Transforms/Vectorize/LoopVectorize.cpp.auto.html
+    BlockFrequencyInfo *BFI =
+        &getAnalysis<BlockFrequencyInfoWrapperPass>().getBFI();
+    // Ref:
+    // https://github.com/microsoft/llvm-1/blob/d91b01bb7602ac9a89e3e352a5e464eeefb3ed08/unittests/Analysis/BlockFrequencyInfoTest.cpp#L79
     auto BB0Freq = BFI->getEntryFreq();
     // errs() << "BB0Freq: " << BB0Freq << "\n";
 
-    for (auto& B : F) {
+    for (auto &B : F) {
       errs() << "I saw a block called " << B.getName() << "\n";
       auto BB1Freq = BFI->getBlockFreq(&B).getFrequency();
-      errs() << "Freq: " << BB1Freq/BB0Freq << "\n";
+      errs() << "Freq: " << BB1Freq / BB0Freq << "\n";
       auto BB1Freq_profile = BFI->getBlockProfileCount(&B);
       errs() << "Freq (profile): " << BB1Freq_profile << "\n\n";
     }
@@ -44,7 +47,8 @@ struct PGOPass : public FunctionPass {
   }
 
   void getAnalysisUsage(AnalysisUsage &AU) const override {
-    // Ref: https://opensource.apple.com/source/clang/clang-703.0.29/src/lib/Transforms/Vectorize/LoopVectorize.cpp.auto.html
+    // Ref:
+    // https://opensource.apple.com/source/clang/clang-703.0.29/src/lib/Transforms/Vectorize/LoopVectorize.cpp.auto.html
     AU.addRequired<BlockFrequencyInfoWrapperPass>();
   }
 };

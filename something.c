@@ -22,9 +22,12 @@ int main(int argc, char *argv[]) {
     }
     foo();
     foo();
-    int abb = bar(3, 5);
+    int a = 3, b = 5;
+    int abb = bar(a, b);
     printf("%d\n", abb);
-    int r = baz(3.14f);
+    float x = 3.14f;
+    int r = baz(x);
+    printf("%f\n", (float)x);
     printf("%d\n", r);
     return 0;
 }

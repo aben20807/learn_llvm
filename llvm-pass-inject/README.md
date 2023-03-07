@@ -17,51 +17,68 @@ $ ninja
 $ clang -flegacy-pass-manager -Xclang -load -Xclang inject/libInjectPass.so ../../something.c
 ```
 
+```{out1.res}
+I saw a function called 'foo', arg_size: 0
+I saw a block called ''
+I saw a CallInst called 'printf' (skip)
+I saw a function called 'bar', arg_size: 2
+I saw a block called ''
+I saw a block called ''
+I saw a block called ''
+I saw a block called ''
+I saw a function called 'baz', arg_size: 1
+I saw a block called ''
+I saw a function called 'main', arg_size: 2
+I saw a block called ''
+I saw a block called ''
+I saw a block called ''
+I saw a CallInst called 'foo', Num of arguments: 0, format specifier of printf: "\n"
+I saw a block called ''
+I saw a block called ''
+I saw a CallInst called 'foo', Num of arguments: 0, format specifier of printf: "\n"
+I saw a CallInst called 'foo', Num of arguments: 0, format specifier of printf: "\n"
+I saw a CallInst called 'bar', Num of arguments: 2, format specifier of printf: ", %d, %d\n"
+I saw a CallInst called 'printf' (skip)
+I saw a CallInst called 'baz', Num of arguments: 1, format specifier of printf: ", %f\n"
+Add fpext for printing float vaule
+I saw a CallInst called 'printf' (skip)
+I saw a CallInst called 'printf' (skip)
+```
+
 ## Output
 
 ```bash
 $ ./a.out 
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'foo'
-inject printf for call 'printf'
-foo
-inject printf for call 'bar'
-inject printf for call 'printf'
-10
-inject printf for call 'baz'
-inject printf for call 'printf'
-3
 ```
 
+```{out2.res}
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'foo'
+foo
+inject printf for call 'bar', 3, 5
+10
+inject printf for call 'baz', 3.140000
+3.140000
+3
+```
