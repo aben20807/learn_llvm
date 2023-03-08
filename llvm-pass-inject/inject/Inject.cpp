@@ -14,6 +14,10 @@ using namespace llvm;
 namespace {
 struct InjectPass : public FunctionPass {
   static char ID;
+  Value *pFile;
+  StructType *IO_FILE_ty;
+  Type *IO_FILE_PTR_ty;
+
   InjectPass() : FunctionPass(ID) {}
 
   static std::string operand_to_flag(Value *operand) {
@@ -52,34 +56,49 @@ struct InjectPass : public FunctionPass {
            ++BI) {
 
         if (auto CBI = dyn_cast<CallInst>(&(*BI))) {
-          errs() << "I saw a CallInst called '"
-                 << CBI->getCalledFunction()->getName() << "'";
+          auto func_name = CBI->getCalledFunction()->getName();
+          errs() << "I saw a CallInst called '" << func_name << "'";
 
-          // Declare C standard library printf
+          // Declare C standard library fprintf
+          Type *IO_FILE_ty =
+              StructType::create(M->getContext(), "struct._IO_FILE");
+          Type *IO_FILE_PTR_ty = PointerType::getUnqual(IO_FILE_ty);
           Type *intType = Type::getInt32Ty(context);
-          std::vector<Type *> printfArgsTypes({Type::getInt8PtrTy(context)});
-          FunctionType *printfType =
-              FunctionType::get(intType, printfArgsTypes, true);
-          llvm::Constant *printfFunc = Function::Create(
-              printfType, Function::ExternalLinkage, "printf", M);
+          std::vector<Type *> fprintfArgsTypes(
+              {IO_FILE_PTR_ty, Type::getInt8PtrTy(context)});
+          FunctionType *fprintfType =
+              FunctionType::get(intType, fprintfArgsTypes, true);
+          llvm::Constant *fprintfFunc = Function::Create(
+              fprintfType, Function::ExternalLinkage, "fprintf", M);
 
           // value of the injected printf function
           // get the called function name
           // Ref: https://stackoverflow.com/a/11687221
-          auto func_name = CBI->getCalledFunction()->getName();
-          if (func_name == "printf" || func_name == "llvm.dbg.declare") {
-            // prevent error: Running pass 'X86 DAG->DAG Instruction Selection
-            // when '-g'
+          if (func_name == "printf" || func_name == "fprintf" ||
+              func_name.startswith("llvm") || func_name == "clock_gettime" ||
+              func_name.startswith("omp") || func_name.startswith("__kmpc")) {
+            // skipping llvm functions is to prevent error: Running pass 'X86
+            // DAG->DAG Instruction Selection when '-g'
             errs() << " (skip)\n";
             continue;
           }
           errs() << ", ";
           std::string s = std::string("inject printf for call '") +
-                          std::string(CBI->getCalledFunction()->getName()) +
-                          "'";
+                          std::string(func_name) + "'";
           Value *str = builder.CreateGlobalStringPtr(s, "str", 0, M);
-          std::vector<Value *> argsV({str});
+          Value *global_var_stderr =
+              M->getOrInsertGlobal("stderr", IO_FILE_PTR_ty);
+          // need to load stderr first
+          // Ref: https://godbolt.org/z/ac73f8oPs
+          builder.SetInsertPoint(CBI);
+          auto loaded_stderr =
+              builder.CreateLoad(IO_FILE_PTR_ty, global_var_stderr);
+          if (global_var_stderr == nullptr) {
+            errs() << "null\n\n\n\n";
+          }
+          std::vector<Value *> argsV({loaded_stderr, str});
 
+          // get operands from the call inst
           // Ref: https://stackoverflow.com/a/40798725
           auto n = CBI->getNumArgOperands();
           errs() << "Num of arguments: " << n << ", ";
@@ -92,7 +111,7 @@ struct InjectPass : public FunctionPass {
           errs() << "format specifier of printf: \"";
           errs().write_escaped(s2) << "\"\n";
           Value *str2 = builder.CreateGlobalStringPtr(s2, "str2", 0, M);
-          std::vector<Value *> argsV2({str2});
+          std::vector<Value *> argsV2({loaded_stderr, str2});
           for (int i = 0; i < n; ++i) {
             Value *operand = CBI->getArgOperand(i);
             if (operand->getType()->isFloatTy()) {
@@ -109,8 +128,15 @@ struct InjectPass : public FunctionPass {
 
           // insert printf right before the call instruction
           builder.SetInsertPoint(CBI);
-          builder.CreateCall(M->getFunction("printf"), argsV);
-          builder.CreateCall(M->getFunction("printf"), argsV2);
+          builder.CreateCall(M->getFunction("fprintf"), argsV);
+          builder.CreateCall(M->getFunction("fprintf"), argsV2);
+
+          // Type *voidType = Type::getVoidTy(context);
+          // FunctionType *gettimestampType = FunctionType::get(voidType, false);
+          // llvm::Constant *gettimestampFunc = Function::Create(
+          //     gettimestampType, Function::ExternalLinkage, "gettimestamp", M);
+          // builder.SetInsertPoint(CBI);
+          // builder.CreateCall(M->getFunction("gettimestamp"), argsV2);
         }
       }
     }

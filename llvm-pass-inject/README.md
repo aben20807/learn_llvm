@@ -52,33 +52,36 @@ $ ./a.out
 ```
 
 ```{out2.res}
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'foo'
 foo
-inject printf for call 'bar', 3, 5
 10
-inject printf for call 'baz', 3.140000
 3.140000
 3
+```
+
+```{out3.res}
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'foo'
+inject printf for call 'bar', 3, 5
+inject printf for call 'baz', 3.140000
 ```

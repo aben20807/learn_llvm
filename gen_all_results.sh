@@ -5,7 +5,7 @@ root=$(pwd)
 for dir in $dirlist
 do
     if [[ "$dir" =~ ^./llvm.* ]]; then
-        printf "$dir\n"
+        printf "\n--- $dir ---\n"
         cd $dir
         make all
         cd $root
