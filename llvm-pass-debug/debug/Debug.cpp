@@ -26,7 +26,7 @@ struct SkeletonPass : public FunctionPass {
           errs() << "src line:  " << subProgram->getLine() << "\n";
           errs() << "src file:  " << subProgram->getFilename() << "\n";
           // errs() << subProgram->getDirectory() << "\n";
-        } 
+        }
       }
     }
 

@@ -2,6 +2,8 @@
 
 A completely useless LLVM pass for the legacy pass manager.
 
++ reference: [sampsyo/llvm-pass-skeleton](https://github.com/sampsyo/llvm-pass-skeleton)
+
 ## build and run
 
 ```bash

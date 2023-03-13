@@ -25,14 +25,14 @@ struct InjectPass : public FunctionPass {
     // type check
     // Ref: https://stackoverflow.com/a/22163892
     if (operandType->isIntegerTy()) {
-      return std::string(", %d");
+      return std::string("%d");
     } else if (operandType->isFloatTy()) {
-      return std::string(", %f");
+      return std::string("%f");
     } else if (operandType->isDoubleTy()) {
-      return std::string(", %lf");
+      return std::string("%lf");
     } else {
       operand->dump();
-      return std::string(", %p");
+      return std::string("%p");
     }
   }
 
@@ -49,15 +49,16 @@ struct InjectPass : public FunctionPass {
     // iterate F, BB
     // Ref: https://stackoverflow.com/q/51082081
     for (Function::iterator BB = F.begin(), E = F.end(); BB != E; ++BB) {
-      errs() << "I saw a block called '" << BB->getName() << "'\n";
-      // Instruction *branchInst = BB->getTerminator();
-      // MDNode *BrWeightMD = branchInst->getMetadata(LLVMContext::MD_prof);
+      // errs() << "I saw a block called '" << BB->getName() << "'\n";
       for (BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE;
            ++BI) {
 
         if (auto CBI = dyn_cast<CallInst>(&(*BI))) {
           auto func_name = CBI->getCalledFunction()->getName();
           errs() << "I saw a CallInst called '" << func_name << "'";
+
+          // insert printf right before the call instruction
+          builder.SetInsertPoint(CBI);
 
           // Declare C standard library fprintf
           Type *IO_FILE_ty =
@@ -90,7 +91,6 @@ struct InjectPass : public FunctionPass {
               M->getOrInsertGlobal("stderr", IO_FILE_PTR_ty);
           // need to load stderr first
           // Ref: https://godbolt.org/z/ac73f8oPs
-          builder.SetInsertPoint(CBI);
           auto loaded_stderr =
               builder.CreateLoad(IO_FILE_PTR_ty, global_var_stderr);
           if (global_var_stderr == nullptr) {
@@ -105,6 +105,11 @@ struct InjectPass : public FunctionPass {
           std::string s2 = "";
           for (int i = 0; i < n; ++i) {
             Value *operand = CBI->getArgOperand(i);
+            if (i != 0) {
+              s2 += ", ";
+            } else {
+              s2 = "; args: ";
+            }
             s2 += operand_to_flag(operand);
           }
           s2 += "\n";
@@ -118,7 +123,6 @@ struct InjectPass : public FunctionPass {
               // We cannot print float number by printf function if we pass it
               // to the function Ref: https://stackoverflow.com/a/28097654
               errs() << "Add fpext for printing float vaule\n";
-              builder.SetInsertPoint(CBI);
               // update operand to the casted version
               operand = builder.CreateCast(Instruction::FPExt, operand,
                                            Type::getDoubleTy(context));
@@ -126,17 +130,8 @@ struct InjectPass : public FunctionPass {
             argsV2.push_back(operand);
           }
 
-          // insert printf right before the call instruction
-          builder.SetInsertPoint(CBI);
           builder.CreateCall(M->getFunction("fprintf"), argsV);
           builder.CreateCall(M->getFunction("fprintf"), argsV2);
-
-          // Type *voidType = Type::getVoidTy(context);
-          // FunctionType *gettimestampType = FunctionType::get(voidType, false);
-          // llvm::Constant *gettimestampFunc = Function::Create(
-          //     gettimestampType, Function::ExternalLinkage, "gettimestamp", M);
-          // builder.SetInsertPoint(CBI);
-          // builder.CreateCall(M->getFunction("gettimestamp"), argsV2);
         }
       }
     }

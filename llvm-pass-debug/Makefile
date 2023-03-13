@@ -1,8 +1,8 @@
-OUT1=out1.res
+include ../consts.mk
 
 all:
-	mkdir -p build
-	cd build && \
+	$(Q)mkdir -p build
+	$(Q)cd build && \
 	cmake -G Ninja .. && \
 	ninja && \
 	clang -flegacy-pass-manager -Xclang -load -Xclang debug/libDebugPass.so -g ../../something.c 2>|$(OUT1) && \
