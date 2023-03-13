@@ -63,18 +63,18 @@ foo
 + stderr:
 
 ```{out3.res}
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'foo'
-inject printf for call 'bar'; args: 3, 5
-inject printf for call 'baz'; args: 3.140000
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'foo'
+inject fprintf for call 'bar'; args: 3, 5
+inject fprintf for call 'baz'; args: 3.140000
 ```

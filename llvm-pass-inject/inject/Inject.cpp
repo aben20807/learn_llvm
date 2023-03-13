@@ -84,7 +84,7 @@ struct InjectPass : public FunctionPass {
             continue;
           }
           errs() << ", ";
-          std::string s = std::string("inject printf for call '") +
+          std::string s = std::string("inject fprintf for call '") +
                           std::string(func_name) + "'";
           Value *str = builder.CreateGlobalStringPtr(s, "str", 0, M);
           Value *global_var_stderr =
